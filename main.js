@@ -105,6 +105,12 @@ class Main{
         plane.receiveShadow = true;
         this.scene.add( plane );
 
+        //Directional Light
+        var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+        directionalLight.position.set(5,5,0);
+        directionalLight.target.position.set(0,0,0);
+        this.scene.add(directionalLight);
+
         //ThirdPersonCamera
         var player = new Player(
             new ThirdPersonCamera(
