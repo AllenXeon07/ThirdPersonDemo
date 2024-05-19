@@ -9,6 +9,21 @@ class Player{
 
 }
 
+class PlayerController{
+
+    constructor(){
+        document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
+        document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
+    }
+    onKeyDown(event){
+
+    }
+    onKeyUp(event){
+        
+    }
+
+}
+
 class Main{
     static WindowResize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
