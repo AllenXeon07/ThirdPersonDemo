@@ -2,8 +2,9 @@ import * as THREE from "three";
 
 class Player{
 
-    constructor(camera){
+    constructor(camera, controller){
         this.camera = camera;
+        this.controller = controller;
     }
 
 }
