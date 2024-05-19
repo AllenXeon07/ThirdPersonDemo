@@ -12,14 +12,54 @@ class Player{
 class PlayerController{
 
     constructor(){
+        this.keys = {
+            "forward": false,
+            "backward": false,
+            "left": false,
+            "right": false
+        }
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
         document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
     }
     onKeyDown(event){
-
+        switch(event.keyCode){
+            case "W".charCodeAt(0):
+            case "w".charCodeAt(0):
+                this.keys['forward'] = true;
+                break;
+            case "S".charCodeAt(0):
+            case "s".charCodeAt(0):
+                this.keys['backward'] = true;
+                break;
+            case "A".charCodeAt(0):
+            case "a".charCodeAt(0):
+                this.keys['left'] = true;
+                break;
+            case "D".charCodeAt(0):
+            case "d".charCodeAt(0):
+                this.keys['right'] = true;
+                break;
+        }
     }
     onKeyUp(event){
-        
+        switch(event.keyCode){
+            case "W".charCodeAt(0):
+            case "w".charCodeAt(0):
+                this.keys['forward'] = false;
+                break;
+            case "S".charCodeAt(0):
+            case "s".charCodeAt(0):
+                this.keys['backward'] = false;
+                break;
+            case "A".charCodeAt(0):
+            case "a".charCodeAt(0):
+                this.keys['left'] = false;
+                break;
+            case "D".charCodeAt(0):
+            case "d".charCodeAt(0):
+                this.keys['right'] = false;
+                break;
+        }    
     }
 
 }
