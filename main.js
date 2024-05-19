@@ -2,9 +2,10 @@ import * as THREE from "three";
 
 class Player{
 
-    constructor(camera, controller){
+    constructor(camera, controller, scene){
         this.camera = camera;
         this.controller = controller;
+        this.scene = scene;
     }
 
 }
@@ -64,6 +65,14 @@ class PlayerController{
 
 }
 
+class ThirdPersonCamera{
+    constructor(camera, positionOffSet, targetOffSet){
+        this.camera = camera;
+        this.positionOffSet = positionOffSet;
+        this.targetOffSet = targetOffSet;
+    }
+}
+
 class Main{
     static WindowResize(){
         this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -84,11 +93,20 @@ class Main{
           }, false);
 
 
-        
+        //Plane
         var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0xcbcbcb, depthWrite: false } ) );
         plane.rotation.x = - Math.PI / 2;
         plane.receiveShadow = true;
         this.scene.add( plane );
+
+        //ThirdPersonCamera
+        var player = new Player(
+            new ThirdPersonCamera(
+                this.camera, new THREE.Vector3(-5,5,0), new THREE.Vector3(1,0,0)
+            ),
+            new PlayerController(),
+            this.scene
+        );
     }
     static render(dt){
         this.renderer.render(this.scene, this.camera);
