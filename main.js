@@ -6,6 +6,8 @@ class Player{
         this.camera = camera;
         this.controller = controller;
         this.scene = scene;
+
+        this.camera.setup(new THREE.Vector3(0,0,0));
     }
 
 }
@@ -71,6 +73,10 @@ class ThirdPersonCamera{
         this.positionOffSet = positionOffSet;
         this.targetOffSet = targetOffSet;
     }
+    setup(target){
+        this.camera.position.copy(this.positionOffSet.add(target));
+        this.camera.target.position.copy(this.targetOffSet.add(target));
+    }
 }
 
 class Main{
@@ -119,4 +125,3 @@ function animate(){
     Main.render(clock.getDelta());
     requestAnimationFrame(animate);
 }
-requestAnimationFrame(animate)
