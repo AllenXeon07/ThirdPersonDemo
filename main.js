@@ -136,7 +136,7 @@ class Main{
         controls.update();
 
         //Plane
-        var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0xcbcbcb, depthWrite: false } ) );
+        var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0xcbcbcb } ) );
         plane.rotation.x = - Math.PI / 2;
         plane.receiveShadow = true;
         plane.castShadow = true;
