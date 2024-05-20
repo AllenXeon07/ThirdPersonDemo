@@ -1,13 +1,42 @@
 import * as THREE from "three";
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
 class Player{
 
-    constructor(camera, controller, scene){
+    constructor(camera, controller, scene, speed){
         this.camera = camera;
         this.controller = controller;
         this.scene = scene;
+        this.speed = speed;
 
         this.camera.setup(new THREE.Vector3(0,0,0));
+
+        this.mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(1,1,1),
+            new THREE.MeshPhongMaterial({color: 0xFF1111})
+        );
+        this.scene.add(this.mesh);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+    }
+
+    update(dt){
+        var direction = new THREE.Vector3(0,0,0);
+        if(this.controller.keys['forward']){
+            direction.x = 1;
+        }
+        if(this.controller.keys['backward']){
+            direction.x = -1;
+        }
+        if(this.controller.keys['left']){
+            direction.z = -1;
+        }
+        if(this.controller.keys['right']){
+            direction.z = 1;
+        }
+        
+        this.mesh.position.add(direction.multiplyScalar(dt*this.speed));
+        this.camera.setup(this.mesh.position);
     }
 
 }
@@ -74,8 +103,12 @@ class ThirdPersonCamera{
         this.targetOffSet = targetOffSet;
     }
     setup(target){
-        this.camera.position.copy(this.positionOffSet.add(target));
-        this.camera.target.position.copy(this.targetOffSet.add(target));
+        var temp = new THREE.Vector3(0,0,0);
+        temp.addVectors(target, this.positionOffSet);
+        this.camera.position.copy(temp);
+        temp = new THREE.Vector3(0,0,0);
+        temp.addVectors(target, this.targetOffSet);
+        this.camera.lookAt(temp);
     }
 }
 
@@ -98,29 +131,57 @@ class Main{
             Main.WindowResize();
           }, false);
 
+        const controls = new OrbitControls(this.camera, this.renderer.domElement);
+        controls.target.set(0, 5, 0);
+        controls.update();
 
         //Plane
         var plane = new THREE.Mesh( new THREE.PlaneGeometry( 100, 100 ), new THREE.MeshPhongMaterial( { color: 0xcbcbcb, depthWrite: false } ) );
         plane.rotation.x = - Math.PI / 2;
         plane.receiveShadow = true;
+        plane.castShadow = true;
         this.scene.add( plane );
 
         //Directional Light
         var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
-        directionalLight.position.set(5,5,0);
-        directionalLight.target.position.set(0,0,0);
+        directionalLight.position.set( 3, 10, 10 );
+        directionalLight.castShadow = true;
+        directionalLight.shadow.camera.top = 20;
+        directionalLight.shadow.camera.bottom = -20;
+        directionalLight.shadow.camera.left = - 20;
+        directionalLight.shadow.camera.right = 20;
+        directionalLight.shadow.camera.near = 0.1;
+        directionalLight.shadow.camera.far = 40;
+        directionalLight.castShadow = true;
         this.scene.add(directionalLight);
 
-        //ThirdPersonCamera
-        var player = new Player(
+        // this.scene.add(new THREE.CameraHelper(directionalLight.shadow.camera));
+
+        this.scene.add(directionalLight.target);
+
+        // ThirdPersonCamera
+        this.player = new Player(
             new ThirdPersonCamera(
-                this.camera, new THREE.Vector3(-5,5,0), new THREE.Vector3(1,0,0)
+                this.camera, new THREE.Vector3(-5,2,0), new THREE.Vector3(0,0,0)
             ),
             new PlayerController(),
-            this.scene
+            this.scene,
+            10
         );
+
+        //Object
+        this.mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(1,1,1),
+            new THREE.MeshPhongMaterial({color: 0xFFFF11})
+        );
+        this.scene.add(this.mesh);
+        this.mesh.castShadow = true;
+        this.mesh.receiveShadow = true;
+        this.mesh.position.set(3,0,0);
+
     }
     static render(dt){
+        this.player.update(dt);
         this.renderer.render(this.scene, this.camera);
     }
 }
@@ -131,3 +192,4 @@ function animate(){
     Main.render(clock.getDelta());
     requestAnimationFrame(animate);
 }
+requestAnimationFrame(animate);
