@@ -28,6 +28,10 @@ class Main{
         plane.castShadow = true;
         this.scene.add( plane );
 
+        //Ambient Light
+        var ambientLight = new THREE.AmbientLight(0x8888FF,1);
+        this.scene.add(ambientLight);
+
         //Directional Light
         var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
         directionalLight.position.set( 3, 10, 10 );

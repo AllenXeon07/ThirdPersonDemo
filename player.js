@@ -64,17 +64,22 @@ export class Player{
     update(dt){
         if(this.mesh && this.animations){
         var direction = new THREE.Vector3(0,0,0);
+
         if(this.controller.keys['forward']){
             direction.x = 1;
+            this.mesh.rotation.y = Math.PI/2;
         }
         if(this.controller.keys['backward']){
             direction.x = -1;
+            this.mesh.rotation.y = -Math.PI/2;
         }
         if(this.controller.keys['left']){
             direction.z = -1;
+            this.mesh.rotation.y = Math.PI;
         }
         if(this.controller.keys['right']){
             direction.z = 1;
+            this.mesh.rotation.y = 0;
         }
         console.log(direction.length())
         if(direction.length() == 0){
@@ -96,15 +101,16 @@ export class Player{
         }
 
         if(this.controller.mouseDown)
-        {
-            var dtMouse = this.controller.deltaMousePos;
-            dtMouse.x = dtMouse.x / Math.PI;
-            dtMouse.y = dtMouse.y / Math.PI;
+            {
+                var dtMouse = this.controller.deltaMousePos;
+                dtMouse.x = dtMouse.x / Math.PI;
+                dtMouse.y = dtMouse.y / Math.PI;
+    
+                this.rotationVector.y += dtMouse.x * dt * 10;
+                this.rotationVector.z += dtMouse.y * dt * 10;
+                this.mesh.rotation.y += dtMouse.x * dt * 10;
+            }
 
-            this.rotationVector.y += dtMouse.x * dt * 10;
-            this.rotationVector.z += dtMouse.y * dt * 10;
-            this.mesh.rotation.y += dtMouse.x * dt * 10;
-        }
         var forwardVector = new THREE.Vector3(1,0,0);
         var rightVector = new THREE.Vector3(0,0,1);
         forwardVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.rotationVector.y);
