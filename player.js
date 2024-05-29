@@ -11,6 +11,7 @@ export class Player{
         this.state = "idle";
         this.rotationVector = new THREE.Vector3(0,0,0);
         this.animations = {};
+        this.lastRotation = 0;
 
         this.camera.setup(new THREE.Vector3(0,0,0), this.rotationVector);
 
@@ -63,6 +64,7 @@ export class Player{
 
     update(dt){
         if(this.mesh && this.animations){
+        this.lastRotation = this.mesh.rotation.y;
         var direction = new THREE.Vector3(0,0,0);
 
         if(this.controller.keys['forward']){
@@ -81,6 +83,7 @@ export class Player{
             direction.z = 1;
             this.mesh.rotation.y = 0;
         }
+        this.lastRotation = this.mesh.rotation.y;
         console.log(direction.length())
         if(direction.length() == 0){
             if(this.animations['idle']){
@@ -108,7 +111,7 @@ export class Player{
     
                 this.rotationVector.y += dtMouse.x * dt * 10;
                 this.rotationVector.z += dtMouse.y * dt * 10;
-                this.mesh.rotation.y += dtMouse.x * dt * 10;
+                this.mesh.rotation.y += this.rotationVector.y;
             }
 
         var forwardVector = new THREE.Vector3(1,0,0);
