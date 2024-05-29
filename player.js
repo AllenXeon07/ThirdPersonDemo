@@ -111,8 +111,9 @@ export class Player{
     
                 this.rotationVector.y += dtMouse.x * dt * 10;
                 this.rotationVector.z += dtMouse.y * dt * 10;
-                this.mesh.rotation.y += this.rotationVector.y;
+                
             }
+            this.mesh.rotation.y += this.rotationVector.y;
 
         var forwardVector = new THREE.Vector3(1,0,0);
         var rightVector = new THREE.Vector3(0,0,1);
